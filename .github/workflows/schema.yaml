@@ -65,15 +65,23 @@ jobs:
 
 
       - name: Apply migration for main
-        run: cd main && make push
+        run: cd main && skeema push development -u root -proot
 
 
       - name: Diff migration from current branch
-        run: cd curr && make diff
+        # The skeema diff command is equivalent to running skeema push with its
+        # dry-run option enabled. An exit code of 0 will be returned if no
+        # differences were found; 1 if some differences were found; or 2+ if an
+        # error occurred.
+        # We continue even if error code 1 is returned.
+        continue-on-error: true
+        run: cd curr && skeema diff development -u root -proot > diff.sql
 
+        # See here to do contional workflow based on the previous step success/failure.
+        #https://stackoverflow.com/questions/69182773/how-to-exclude-an-exit-code-in-github-actions-workflow-result-status
 
       - name: Create comment
         uses: thollander/actions-comment-pull-request@v2
         with:
-          filePath: /curr/diff.sql
+          filePath: ${{ github.workspace }}/curr/diff.sql
           reactions: rocket
