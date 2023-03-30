@@ -20,14 +20,60 @@ jobs:
     permissions:
       pull-requests: write
 
+    env:
+      DB_NAME: test
+      DB_USER: root
+      DB_PASS: root
+      DB_HOST: 0.0.0.0
+      DB_PORT: 3306
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Run a one-line script
         run: echo Hello, world!
 
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_NAME }};' -u${{ env.DB_USER }} -p${{ env.DB_PASS }}
+
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          path: main
+          ref: main
+
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+        with:
+          path: curr
+
+      - name: Print dir
+        run: |
+          ls -a
+          ls -a curr
+          ls -a main
+
+      - name: Setup latest go
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+          check-latest: true
+
+      - name: Install skeema.io
+        run: go install github.com/skeema/skeema@v1.9.0
+
+
+      - name: Apply migration for main
+        run: cd main && make push
+
+
+      - name: Diff migration from current branch
+        run: cd curr && make diff
+
+
       - name: Create comment
         uses: thollander/actions-comment-pull-request@v2
         with:
-          message: |
-            This comment was written by a bot!
+          filePath: /curr/diff.sql
           reactions: rocket
