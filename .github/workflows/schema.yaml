@@ -65,7 +65,7 @@ jobs:
 
 
       - name: Apply migration for main
-        run: cd main && make push
+        run: cd main && skeema push development -u root -proot
 
 
       - name: Diff migration from current branch
