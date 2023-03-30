@@ -27,8 +27,8 @@ jobs:
 
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v2
-        issue-number: ${{ github.event.pull_request.number }}
         with:
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             This comment was written by a bot!
           reactions: rocket
