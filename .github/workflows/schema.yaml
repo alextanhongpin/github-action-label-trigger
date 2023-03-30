@@ -77,6 +77,8 @@ jobs:
         continue-on-error: true
         run: cd curr && skeema diff development -u root -proot > diff.sql
 
+        # See here to do contional workflow based on the previous step success/failure.
+        #https://stackoverflow.com/questions/69182773/how-to-exclude-an-exit-code-in-github-actions-workflow-result-status
 
       - name: Create comment
         uses: thollander/actions-comment-pull-request@v2
