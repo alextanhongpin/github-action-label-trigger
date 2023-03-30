@@ -17,3 +17,5 @@ create table user (
 	unique (username)
 );
 ```
+
+Test out schema.
