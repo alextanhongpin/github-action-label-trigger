@@ -5,7 +5,7 @@ name: Label trigger
 # Controls when the workflow will run
 on:
   pull_request:
-    types: [ labeled ]
+    branches: [ '*' ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -14,7 +14,7 @@ on:
 jobs:
   # This workflow contains a single job called "add-comment"
   add-comment:
-    if: ${{ github.event.label.name == 'add-comment' }}
+    if: contains(github.event.pull_request.labels.*.name, 'add-comment')
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     permissions:
@@ -24,10 +24,3 @@ jobs:
     steps:
       - name: Run a one-line script
         run: echo Hello, world!
-
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          body: |
-            This comment was written by a bot!
-          reactions: rocket
