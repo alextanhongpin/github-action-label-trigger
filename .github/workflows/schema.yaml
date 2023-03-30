@@ -83,5 +83,5 @@ jobs:
       - name: Create comment
         uses: thollander/actions-comment-pull-request@v2
         with:
-          filePath: /curr/diff.sql
+          filePath: ${{ github.workspace }}/curr/diff.sql
           reactions: rocket
