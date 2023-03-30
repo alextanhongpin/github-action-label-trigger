@@ -24,11 +24,3 @@ jobs:
     steps:
       - name: Run a one-line script
         run: echo Hello, world!
-
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            This comment was written by a bot!
-          reactions: rocket
