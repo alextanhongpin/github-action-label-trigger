@@ -65,11 +65,11 @@ jobs:
 
 
       - name: Apply migration for main
-        run: cd main && make push
+        run: cd main && skeema push development -u root -proot
 
 
       - name: Diff migration from current branch
-        run: cd curr && make diff
+        run: cd curr && skeema diff development -u root -proot > diff.sql
 
 
       - name: Create comment
